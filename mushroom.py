@@ -24,16 +24,25 @@ from sklearn.metrics import accuracy_score
 import pandas as pd
 import seaborn as sns
 
+# Data
 df = pd.read_csv('mushroom_cleaned.csv')
 X = df.drop('class', axis = 1).values
 y = df['class'].values
 X_train, X_test, y_train, y_test = train_test_split(X, y)
 X_train.shape, X_test.shape, y_train.shape, y_test.shape
-model = nn.Sequential(nn.Linear(8,2),nn.Sigmoid(),nn.Linear(2,1),nn.Sigmoid())
-loss_fn = nn.BCELoss()
-optimizer = torch.optim.SGD(model.parameters(), lr = 0.01)
+
 X_train = torch.from_numpy(X_train.astype(np.float32))
 y_train = torch.from_numpy(y_train.astype(np.float32))
+X_test = torch.from_numpy(X_test.astype(np.float32))
+y_test = torch.from_numpy(y_test.astype(np.float32))
+
+# Model/Algorithm
+model = nn.Sequential(nn.Linear(8,2),nn.Sigmoid(),nn.Linear(2,1),nn.Sigmoid())
+
+# Training
+loss_fn = nn.BCELoss()
+optimizer = torch.optim.SGD(model.parameters(), lr = 0.01)
+
 for epoch in range(250):
   for i in range(len(X_train)):
     out = model(X_train[i])
@@ -42,8 +51,7 @@ for epoch in range(250):
     optimizer.step()
     optimizer.zero_grad()
   print(epoch)
-X_test = torch.from_numpy(X_test.astype(np.float32))
-y_test = torch.from_numpy(y_test.astype(np.float32))
+
+# Prediction
 y_pred = model(X_test)
-y_pred
 accuracy_score(y_test, y_pred.detach().numpy().round())
