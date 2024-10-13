@@ -1,10 +1,20 @@
 """
 This is a binary classification problem that uses a weather dataset to predict 
-the humidity and tempature to determine if the weather will be good or bad.
+the humidity and temperature to determine if the weather will be good or bad.
 
 The data is made using a time series. 
 
-I generated the data over all 366 days of the leap year 2024. It records humidity and tempature every 3 hours.
+I generated the data over all 366 days of the leap year 2024. It records humidity and temperature every 3 hours, or 8 times a day.
+The dimensions of X are (2928,2).
+The 2928 rows come from 8 recordings a day for 366 days, or 8*366.
+The 2 columns are the humidity and temperature.
+
+The dimensions of y are (2928,). The comma comes from when tuple is only 1 value.
+The 2928 values come from 8 recordings a day for 366 days, or 8*366. They are either 0 or 1, representing good or bad weather.
+
+Good weather is when the temperature is in the 70's and the humidity is in the 30's.
+Bad weather is when the temperature is in the 90's and the humidity is in the 60's.
+If the data doesnt fit these criteria, then the model has to decide if the weather is good or bad.
  
 """
 import torch
@@ -40,8 +50,6 @@ X_test = torch.from_numpy(X_test.astype(np.float32))
 y_test = torch.from_numpy(y_test.astype(np.float32))
 
 # Algo
-
-
 model = nn.Sequential(nn.Linear(2,2),nn.Sigmoid(),nn.Linear(2,1),nn.Sigmoid())
 
 # Training
